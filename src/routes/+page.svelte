@@ -177,13 +177,12 @@ time div {
   import { onMount } from 'svelte';
   let switchValue = true;
   let advancedShown = false;
-  let date = new Date();
+  var date = new Date();
 
   // console.log($page.data.ip)
 
   onMount(() => {
     setInterval(() => {
-      date = new Date();
       document.title = `${timeStr} (${$page.data.city}, ${$page.data.country}) | The Time`;
       if (switchValue) {
         document.body.classList.add('dark');
