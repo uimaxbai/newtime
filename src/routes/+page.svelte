@@ -178,11 +178,13 @@ time div {
   let switchValue = true;
   let advancedShown = false;
   var date = new Date();
+  let diff: number = 0;
 
   // console.log($page.data.ip)
 
   onMount(() => {
     setInterval(() => {
+      date = new Date((new Date()).getTime() + diff);
       document.title = `${timeStr} (${$page.data.city}, ${$page.data.country}) | The Time`;
       if (switchValue) {
         document.body.classList.add('dark');
@@ -226,7 +228,8 @@ time div {
       // console.log(lastTime);
       // console.log(Date.parse(data.datetime));
       let unixtime = data.unixtime * 1000;
-      let diff = (new Date()).getTime() - (((new Date()).getTime() - currentTime));
+      diff = unixtime - (((new Date()).getTime() - currentTime));
+      diff = (new Date()).getTime() - unixtime;
       // console.log(lastTime);
       return diff;
     }
@@ -245,7 +248,7 @@ time div {
     else {
       document.getElementById("tower-cell")!.style.opacity = "1";
     }
-    let date = new Date((new Date()).getTime() + response);
-    return date.getTime();
+    let date1 = new Date((new Date()).getTime() + response);
+    return date1.getTime();
   }
 </script>
