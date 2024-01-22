@@ -184,7 +184,7 @@ time div {
   onMount(() => {
     setInterval(() => {
       date = new Date();
-      document.title = `${timeStr} | The Time`;
+      document.title = `${timeStr} (${$page.data.city}, ${$page.data.country}) | The Time`;
       if (switchValue) {
         document.body.classList.add('dark');
         document.body.classList.remove('light');
