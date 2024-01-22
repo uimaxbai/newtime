@@ -160,7 +160,8 @@ time div {
       {#if advancedShown}
         <div in:fade={{ delay: 0, duration: 200 }} class="flex flex-col gap-2 mt-4">
           <span>Unix: <time id="unix" datetime={date.toTimeString()}>{date.getTime()}</time> </span>
-          <span>IP: {ip}</span>
+          <span>IP: {$page.data.ip}</span>
+          <span>General Location: {$page.data.city}, {$page.data.region}, {$page.data.country}</span>
         </div>
       {/if}
     </div>
@@ -178,7 +179,7 @@ time div {
   let advancedShown = false;
   let date = new Date();
 
-  console.log($page.data.ip)
+  // console.log($page.data.ip)
 
   onMount(() => {
     setInterval(() => {
