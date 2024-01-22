@@ -94,6 +94,12 @@ time div {
 .tower-cell {
   font-size: 2rem;
 }
+.toggleButton {
+  padding: .5rem;
+  border-radius: 5px;
+  border: 1px solid lightgray;
+  transition: .2s;
+}
 </style>
 
 <svelte:head>
@@ -135,22 +141,45 @@ time div {
       </h1>
       <div class="info-div flex gap-2 flex-row justify-between w-full">
         <div class="gap-2 flex items-center">
+          <button on:click={() => advancedShown = !advancedShown} class="toggleButton">
+            {#if advancedShown}
+              <div in:fade={{ delay: 0, duration: 200 }}>
+                <Fa icon={faAngleUp} />
+              </div>
+            {:else}
+              <div in:fade={{ delay: 0, duration: 200 }}>
+                <Fa icon={faAngleDown} />
+              </div>
+            {/if}
+          </button>
           <Switch design="slider" bind:value={switchValue} label="🌙" />
           <span id="timezone" class="timezone">Timezone: {timezone}</span>
         </div>
         <span>UTC: <time id="utc" datetime={utcDateStr}>{utcDateStr1} {utcTimeStr}</time> </span>
       </div>
+      {#if advancedShown}
+        <div in:fade={{ delay: 0, duration: 200 }} class="flex flex-col gap-2 mt-4">
+          <span>Unix: <time id="unix" datetime={date.toTimeString()}>{date.getTime()}</time> </span>
+          <span>IP: {ip}</span>
+        </div>
+      {/if}
     </div>
 </main>
 
 
 <script lang="ts">
   import Fa from '../../node_modules/svelte-fa/dist/fa.svelte';
-  import { faTowerCell } from '@fortawesome/free-solid-svg-icons/index.js';
+  import { fade } from 'svelte/transition';
+  import { faTowerCell, faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons/index.js';
   import Switch from './Switch.svelte';
+  import { page } from '$app/stores';
   import { onMount } from 'svelte';
   let switchValue = true;
+  let advancedShown = false;
   let date = new Date();
+
+  console.log($page.data.ip)
+
   onMount(() => {
     setInterval(() => {
       date = new Date();
@@ -164,8 +193,12 @@ time div {
         document.body.classList.remove('dark');
       }
     }, 10);
+    setInterval(() => {
+      actuallyGetTime().then((time) => {
+        date = new Date(time);
+      });
+    }, 1000);
   });
-
 
   $: ms = ('0' + Math.floor(date.getMilliseconds() / 10)).slice(-2);
   $: s = ('0' + date.getSeconds()).slice(-2);
@@ -190,11 +223,10 @@ time div {
       const response = await fetch('https://worldtimeapi.org/api/timezone/' + timezone);
       const data = await response.json();
       // console.log(data);
-      let lastTime = (new Date()).getTime() - currentTime;
       // console.log(lastTime);
       // console.log(Date.parse(data.datetime));
-
-      let diff = (new Date()).getTime() - (Date.parse(data.datetime) + lastTime);
+      let unixtime = data.unixtime * 1000;
+      let diff = (new Date()).getTime() - (((new Date()).getTime() - currentTime));
       // console.log(lastTime);
       return diff;
     }
@@ -205,7 +237,8 @@ time div {
   }
 
   async function actuallyGetTime() {
-    let response = await getTime(timezone);
+    let timezoneRaw = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    let response = await getTime(timezoneRaw);
     if (Number.isNaN(response)) {
       document.getElementById("tower-cell")!.style.opacity = "0.5";
     }
