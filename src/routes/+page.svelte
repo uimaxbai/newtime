@@ -180,6 +180,26 @@ time div {
   var date = new Date();
   let diff: number = 0;
 
+  onMount(() => {
+    document.querySelector(".toggleButton")!.addEventListener("click", () => {
+      localStorage.setItem("theme", (!switchValue).toString());
+    });
+    setInterval(() => {
+      localStorage.setItem("theme", switchValue.toString());
+    }, 1000);
+
+    if (localStorage.getItem("theme") === "true") {
+      switchValue = true;
+    }
+    else if (localStorage.getItem("theme") === null) {
+      switchValue = true;
+      localStorage.setItem("theme", switchValue.toString());
+    }
+    else {
+      switchValue = false;
+    }
+  });
+
   // console.log($page.data.ip)
 
   onMount(() => {
@@ -221,21 +241,16 @@ time div {
 
   async function getTime(timezone: string) {
     try {
-      let currentTime = (new Date()).getTime();
-      const response = await fetch('https://worldtimeapi.org/api/timezone/' + timezone);
+      const response = await fetch('https://worldtimeapi.org/api/ip');
       const data = await response.json();
-      // console.log(data);
-      // console.log(lastTime);
-      // console.log(Date.parse(data.datetime));
-      let unixtime = data.unixtime * 1000;
-      diff = unixtime - (((new Date()).getTime() - currentTime));
-      diff = (new Date()).getTime() - unixtime;
-      // console.log(lastTime);
+      const serverTime = new Date(Date.parse(data.datetime));
+      const localTime = new Date();
+      diff = serverTime.getTime() - localTime.getTime();
       return diff;
     }
     catch (e) {
       console.error(e);
-      return NaN;
+      return diff;
     }
   }
 
@@ -251,4 +266,6 @@ time div {
     let date1 = new Date((new Date()).getTime() + response);
     return date1.getTime();
   }
+
+  
 </script>
