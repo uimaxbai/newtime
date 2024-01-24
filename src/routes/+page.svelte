@@ -1,5 +1,15 @@
 <style lang="scss">
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@font-face {
+  font-family:'JetBrains Mono';
+  src: url(/fonts/JetBrainsMono-Bold.woff2);
+  font-weight: bold;
+}
+@font-face {
+  font-family:'JetBrains Mono';
+  src: url(/fonts/JetBrainsMono-Regular.woff2);
+  font-weight: normal;
+}
+
 * {
   user-select: none;
 }
