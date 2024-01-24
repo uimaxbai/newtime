@@ -54,8 +54,6 @@ time div {
   background: #111!important;
 }
 
-
-
 .ms {
   font-size: 6vw;
 }
@@ -251,6 +249,13 @@ time div {
 
 
 <script lang="ts">
+  import Fa from '../../node_modules/svelte-fa/dist/fa.svelte';
+  import { fade } from 'svelte/transition';
+  import { faTowerCell, faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons/index.js';
+  import { page } from '$app/stores';
+  import { onMount } from 'svelte';
+  import ColorPicker from 'svelte-awesome-color-picker';
+  let theme = 1;
   let hex: string = "#000000ff";
   let rgb = {
     "r": 255,
@@ -258,14 +263,6 @@ time div {
     "b": 255,
     "a": 1,
   }
-  import Fa from '../../node_modules/svelte-fa/dist/fa.svelte';
-  import { fade } from 'svelte/transition';
-  import { faTowerCell, faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons/index.js';
-  import Switch from './Switch.svelte';
-  import { page } from '$app/stores';
-  import { onMount } from 'svelte';
-  import ColorPicker from 'svelte-awesome-color-picker';
-  let theme = 1;
   /* onMount(() => {
     if (theme === 2) {
       document.body.classList.remove('dark');
@@ -376,6 +373,4 @@ time div {
     let date1 = new Date((new Date()).getTime() + response);
     return date1.getTime();
   }
-
-  
 </script>
