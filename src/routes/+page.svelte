@@ -35,13 +35,13 @@ time div {
   font-family: 'JetBrains Mono', monospace;
 }
 
-:global(body.light) {
-  color: #000;
-  background: #fff;
+:global(.light) {
+  color: #000!important;
+  background: #fff!important;
 }
-:global(body.dark) {
-  color: #eee;
-  background: #111;
+:global(.dark) {
+  color: #eee!important;
+  background: #111!important;
 }
 
 
@@ -178,7 +178,8 @@ time div {
   <meta name="msapplication-config" content="/icons/browserconfig.xml">
 </svelte:head>
 
-<main class="main flex min-h-screen flex-col items-center justify-center p-4">
+
+<main class="main transition flex min-h-screen flex-col items-center justify-center p-4" class:dark={theme === 1} class:light={theme === 0} style="background: {hex}; color: rgba({rgb.r}, {rgb.b}, {rgb.g}, {rgb.a});">
     <div>
       <h1 class="timeStr">
         <time datetime={dateStr} class="timeEl flex flex-col">
@@ -240,12 +241,12 @@ time div {
 
 
 <script lang="ts">
-  let hex: string = "#00000000";
+  let hex: string = "#000000ff";
   let rgb = {
-    "r": 0,
-    "g": 0,
-    "b": 0,
-    "a": 0,
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 1,
   }
   import Fa from '../../node_modules/svelte-fa/dist/fa.svelte';
   import { fade } from 'svelte/transition';
@@ -255,6 +256,16 @@ time div {
   import { onMount } from 'svelte';
   import ColorPicker from 'svelte-awesome-color-picker';
   let theme = 1;
+  /* onMount(() => {
+    if (theme === 2) {
+      document.body.classList.remove('dark');
+      document.body.classList.remove('light');
+      document.body.style.background = hex;
+      document.body.style.color = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${rgb.a})`;
+      document.querySelector<HTMLElement>(".custom")!.style.background = hex;
+      document.querySelector<HTMLElement>(".custom")!.style.color = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${rgb.a})`
+    }
+  }); */
   let advancedShown = false;
   var date = new Date();
   let diff: number = 0;
@@ -286,6 +297,10 @@ time div {
     else {
       theme = 0;
     }
+    if (localStorage.getItem("bg") !== null && localStorage.getItem("rgb") !== null) {
+      hex = localStorage.getItem("bg")!;
+      rgb = JSON.parse(localStorage.getItem("rgb")!);
+    }
   });
 
   // console.log($page.data.ip)
@@ -294,20 +309,10 @@ time div {
     setInterval(() => {
       date = new Date((new Date()).getTime() + diff);
       document.title = `${timeStr} (${$page.data.city}, ${$page.data.country}) | The Time`;
-      if (theme === 1) {
-        document.body.classList.add('dark');
-        document.body.classList.remove('light');
-      }
-      else if (theme === 0) {
-        document.body.classList.add('light');
-        document.body.classList.remove('dark');
-      }
-      else if (theme === 2) {
-        document.body.style.background = hex;
-        document.body.style.color = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${rgb.a})`;
-        document.querySelector<HTMLElement>(".custom")!.style.background = hex;
-          document.querySelector<HTMLElement>(".custom")!.style.color = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${rgb.a})`;
-
+      localStorage.setItem("theme", theme.toString());
+      if (theme === 2) {
+        localStorage.setItem("bg", hex);
+        localStorage.setItem("rgb", JSON.stringify(rgb));
       }
     }, 10);
     setInterval(() => {
