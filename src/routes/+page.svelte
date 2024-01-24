@@ -185,7 +185,7 @@ time div {
         <time datetime={dateStr} class="timeEl flex flex-col">
           <span class="dateString">{dateStr1}</span>
           <div class="flex items-baseline">
-            <button on:click={() => advancedShown = !advancedShown} class="toggleButton">
+            <button aria-label="Show options" on:click={() => advancedShown = !advancedShown} class="toggleButton">
               {#if advancedShown}
                 <div in:fade={{ delay: 0, duration: 200 }}>
                   <Fa icon={faAngleUp} style="font-size: initial;" />
@@ -206,11 +206,11 @@ time div {
         <div class="gap-2 flex items-center">
           {#if advancedShown}
             <div class="theme-selector">
-              <button class="light" on:click={() => theme = 0}>{h}</button>
+              <button aria-label="Change to light mode" class="light" on:click={() => theme = 0}>{h}</button>
               <span class="seperator">:</span>
-              <button class="dark" on:click={() => theme = 1}>{m}</button>
+              <button aria-label="Change to dark mode" class="dark" on:click={() => theme = 1}>{m}</button>
               <span class="seperator">:</span>
-              <button class="custom" on:click={() => theme = 2}>{s}</button>
+              <button aria-label="Define a custom theme" class="custom" on:click={() => theme = 2}>{s}</button>
             </div>
             {#if theme === 2}
             <ColorPicker
