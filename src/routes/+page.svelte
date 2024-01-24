@@ -35,13 +35,13 @@ time div {
   font-family: 'JetBrains Mono', monospace;
 }
 
-:global(body.light) {
-  color: #000;
-  background: #fff;
+:global(.light) {
+  color: #000!important;
+  background: #fff!important;
 }
-:global(body.dark) {
-  color: #eee;
-  background: #111;
+:global(.dark) {
+  color: #eee!important;
+  background: #111!important;
 }
 
 
@@ -90,6 +90,11 @@ time div {
     font-size: 5vw;
   }
 }
+@media (max-width: 550px) {
+  .info-div {
+    margin-top: 0!important;
+  }
+}
 
 .tower-cell {
   font-size: 2rem;
@@ -99,6 +104,52 @@ time div {
   border-radius: 5px;
   border: 1px solid lightgray;
   transition: .2s;
+}
+.info-div {
+  margin-top: -1em;
+}
+.theme-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  border: 1px solid gray;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 1.25rem;
+  flex-direction: row!important;
+  button {
+    padding: .5rem;
+  }
+  .light, .dark {
+    border-right: 1px solid gray;
+  }
+  .seperator {
+    margin-left: -40px;
+    padding: 0;
+    position: absolute;
+  }
+  .seperator:nth-child(2) {
+    margin-left: 40px;
+  }
+  .light {
+    background: #fff;
+    color: black;
+    border-radius: 5px 0 0 5px;
+  }
+  .dark {
+    background: #111;
+    color: #eee;
+    border-radius: 0;
+  }
+  .custom {
+    background-image: linear-gradient(315deg, #ff0000, #ff8000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
+    border-radius: 0 5px 5px 0;
+    color: #000;
+  }
+}
+:global(.color) {
+  border: 1px solid #999;
 }
 </style>
 
@@ -117,7 +168,7 @@ time div {
   <meta name="twitter:description" content="A simple website that shows the time. Night mode included as default." />
   <meta name="twitter:creator" content="@uimaxbai" />
   <meta name="robots" content="index, follow, max-snippet: -1, max-image-preview:large, max-video-preview: -1">
-  <meta name="theme-color" content="#000000">
+  <meta name="theme-color" content="#111111">
   <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
@@ -127,12 +178,24 @@ time div {
   <meta name="msapplication-config" content="/icons/browserconfig.xml">
 </svelte:head>
 
-<main class="main flex min-h-screen flex-col items-center justify-center p-4">
+
+<main class="main transition flex min-h-screen flex-col items-center justify-center p-4" class:dark={theme === 1} class:light={theme === 0} style="background: {hex}; color: rgba({rgb.r}, {rgb.b}, {rgb.g}, {rgb.a});">
     <div>
       <h1 class="timeStr">
         <time datetime={dateStr} class="timeEl flex flex-col">
           <span class="dateString">{dateStr1}</span>
           <div class="flex items-baseline">
+            <button aria-label="Show options" on:click={() => advancedShown = !advancedShown} class="toggleButton">
+              {#if advancedShown}
+                <div in:fade={{ delay: 0, duration: 200 }}>
+                  <Fa icon={faAngleUp} style="font-size: initial;" />
+                </div>
+              {:else}
+                <div in:fade={{ delay: 0, duration: 200 }}>
+                  <Fa icon={faAngleDown} style="font-size: initial;" />
+                </div>
+              {/if}
+            </button>
             <span>{timeStr}</span>
             <span class='ms'>{msStr}</span>
             <span id="tower-cell" class='tower-cell ml-2'><Fa icon={faTowerCell} /></span>
@@ -141,24 +204,33 @@ time div {
       </h1>
       <div class="info-div flex gap-2 flex-row justify-between w-full">
         <div class="gap-2 flex items-center">
-          <button on:click={() => advancedShown = !advancedShown} class="toggleButton">
-            {#if advancedShown}
-              <div in:fade={{ delay: 0, duration: 200 }}>
-                <Fa icon={faAngleUp} />
-              </div>
-            {:else}
-              <div in:fade={{ delay: 0, duration: 200 }}>
-                <Fa icon={faAngleDown} />
-              </div>
+          {#if advancedShown}
+            <div class="theme-selector">
+              <button aria-label="Change to light mode" class="light" on:click={() => theme = 0}>{h}</button>
+              <span class="seperator">:</span>
+              <button aria-label="Change to dark mode" class="dark" on:click={() => theme = 1}>{m}</button>
+              <span class="seperator">:</span>
+              <button aria-label="Define a custom theme" class="custom" on:click={() => theme = 2}>{s}</button>
+            </div>
+            {#if theme === 2}
+            <ColorPicker
+              bind:hex
+              label=""
+            />
+            <ColorPicker
+              bind:rgb
+              label=""
+            />
             {/if}
-          </button>
-          <Switch design="slider" bind:value={switchValue} label="🌙" />
-          <span id="timezone" class="timezone">Timezone: {timezone}</span>
+            <span id="timezone" transition:fade={{ delay: 0, duration: 200 }} class="timezone">Timezone: {timezone}</span>
+          {/if}
         </div>
-        <span>UTC: <time id="utc" datetime={utcDateStr}>{utcDateStr1} {utcTimeStr}</time> </span>
+        {#if advancedShown}
+          <span transition:fade={{ delay: 0, duration: 200 }}>UTC: <time id="utc" datetime={utcDateStr}>{utcDateStr1} {utcTimeStr}</time></span>
+        {/if}
       </div>
       {#if advancedShown}
-        <div in:fade={{ delay: 0, duration: 200 }} class="flex flex-col gap-2 mt-4">
+        <div transition:fade={{ delay: 0, duration: 200 }} class="flex flex-col gap-2 mt-4">
           <span>Unix: <time id="unix" datetime={date.toTimeString()}>{date.getTime()}</time> </span>
           <span>IP: {$page.data.ip}</span>
           <span>General Location: {$page.data.city}, {$page.data.region}, {$page.data.country}</span>
@@ -169,34 +241,65 @@ time div {
 
 
 <script lang="ts">
+  let hex: string = "#000000ff";
+  let rgb = {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 1,
+  }
   import Fa from '../../node_modules/svelte-fa/dist/fa.svelte';
   import { fade } from 'svelte/transition';
   import { faTowerCell, faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons/index.js';
   import Switch from './Switch.svelte';
   import { page } from '$app/stores';
   import { onMount } from 'svelte';
-  let switchValue = true;
+  import ColorPicker from 'svelte-awesome-color-picker';
+  let theme = 1;
+  /* onMount(() => {
+    if (theme === 2) {
+      document.body.classList.remove('dark');
+      document.body.classList.remove('light');
+      document.body.style.background = hex;
+      document.body.style.color = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${rgb.a})`;
+      document.querySelector<HTMLElement>(".custom")!.style.background = hex;
+      document.querySelector<HTMLElement>(".custom")!.style.color = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${rgb.a})`
+    }
+  }); */
   let advancedShown = false;
   var date = new Date();
   let diff: number = 0;
 
   onMount(() => {
-    document.querySelector(".toggleButton")!.addEventListener("click", () => {
-      localStorage.setItem("theme", (!switchValue).toString());
+    /* document.querySelector("button[role='switch']")!.addEventListener("click", () => {
+      localStorage.setItem("theme", switchValue.toString());
     });
     setInterval(() => {
       localStorage.setItem("theme", switchValue.toString());
-    }, 1000);
+    }, 1000); */
+    /* setInterval(() => {
+      console.log(hex, rgb);
+    }, 1000); */
 
-    if (localStorage.getItem("theme") === "true") {
-      switchValue = true;
+    if (localStorage.getItem("theme") === "0") {
+      theme = 0;
     }
-    else if (localStorage.getItem("theme") === null) {
-      switchValue = true;
-      localStorage.setItem("theme", switchValue.toString());
+    else if (localStorage.getItem("theme") === "1") {
+      theme = 1;
+    }
+    else if (localStorage.getItem("theme") === "2") {
+      theme = 2;
+    }
+    else if (localStorage.getItem("theme") !== "0" && localStorage.getItem("theme") !== "1" && localStorage.getItem("theme") !== "2"){
+      theme = 1;
+      localStorage.setItem("theme", theme.toString());
     }
     else {
-      switchValue = false;
+      theme = 0;
+    }
+    if (localStorage.getItem("bg") !== null && localStorage.getItem("rgb") !== null) {
+      hex = localStorage.getItem("bg")!;
+      rgb = JSON.parse(localStorage.getItem("rgb")!);
     }
   });
 
@@ -206,13 +309,10 @@ time div {
     setInterval(() => {
       date = new Date((new Date()).getTime() + diff);
       document.title = `${timeStr} (${$page.data.city}, ${$page.data.country}) | The Time`;
-      if (switchValue) {
-        document.body.classList.add('dark');
-        document.body.classList.remove('light');
-      }
-      else {
-        document.body.classList.add('light');
-        document.body.classList.remove('dark');
+      localStorage.setItem("theme", theme.toString());
+      if (theme === 2) {
+        localStorage.setItem("bg", hex);
+        localStorage.setItem("rgb", JSON.stringify(rgb));
       }
     }, 10);
     setInterval(() => {
