@@ -213,7 +213,7 @@ time div {
       <div class="info-div flex gap-2 flex-row justify-between w-full">
         <div class="gap-2 flex items-center">
           {#if advancedShown}
-            <div class="theme-selector">
+            <div class="theme-selector canBeHidden">
               <button aria-label="Change to light mode" class="light" on:click={() => theme = 0}>{h}</button>
               <span class="seperator">:</span>
               <button aria-label="Change to dark mode" class="dark" on:click={() => theme = 1}>{m}</button>
@@ -221,24 +221,24 @@ time div {
               <button aria-label="Define a custom theme" class="custom" on:click={() => theme = 2}>{s}</button>
             </div>
             {#if theme === 2}
-            <ColorPicker
-              bind:hex
-              label=""
-            />
-            <ColorPicker
-              bind:rgb
-              label=""
-            />
+              <ColorPicker
+                bind:hex
+                label=""
+              />
+              <ColorPicker
+                bind:rgb
+                label=""
+              />
             {/if}
-            <span id="timezone" transition:fade={{ delay: 0, duration: 200 }} class="timezone">Timezone: {timezone}</span>
+            <span id="timezone" transition:fade={{ delay: 0, duration: 200 }} class="timezone canBeHidden">Timezone: {timezone}</span>
           {/if}
         </div>
         {#if advancedShown}
-          <span transition:fade={{ delay: 0, duration: 200 }}>UTC: <time id="utc" datetime={utcDateStr}>{utcDateStr1} {utcTimeStr}</time></span>
+          <span class="canBeHidden" transition:fade={{ delay: 0, duration: 200 }}>UTC: <time id="utc" datetime={utcDateStr}>{utcDateStr1} {utcTimeStr}</time></span>
         {/if}
       </div>
       {#if advancedShown}
-        <div transition:fade={{ delay: 0, duration: 200 }} class="flex flex-col gap-2 mt-4">
+        <div transition:fade={{ delay: 0, duration: 200 }} class="flex flex-col gap-2 mt-4 canBeHidden">
           <span>Unix: <time id="unix" datetime={date.toTimeString()}>{date.getTime()}</time> </span>
           <span>IP: {$page.data.ip}</span>
           <span>General Location: {$page.data.city}, {$page.data.region}, {$page.data.country}</span>
@@ -308,11 +308,7 @@ time div {
       hex = localStorage.getItem("bg")!;
       rgb = JSON.parse(localStorage.getItem("rgb")!);
     }
-  });
 
-  // console.log($page.data.ip)
-
-  onMount(() => {
     setInterval(() => {
       date = new Date((new Date()).getTime() + diff);
       document.title = `${timeStr} (${$page.data.city}, ${$page.data.country}) | The Time`;
@@ -327,6 +323,31 @@ time div {
         date = new Date(time);
       });
     }, 1000);
+
+    document.addEventListener("mousemove", () => {
+      document.querySelector<HTMLElement>(".toggleButton")!.style.opacity = "1";
+      document.querySelectorAll<HTMLElement>(".canBeHidden").forEach((element) => {
+        element.style.opacity = "1";
+      });
+      document.querySelectorAll<HTMLElement>(".color-picker").forEach((element) => {
+        element.style.opacity = "1";
+      });
+      setTimeout(() => {
+        document.querySelector<HTMLElement>(".toggleButton")!.style.opacity = "0";
+        document.querySelectorAll<HTMLElement>(".canBeHidden").forEach((element) => {
+          element.style.opacity = "0";
+        });
+        document.querySelectorAll<HTMLElement>(".color-picker").forEach((element) => {
+          element.style.opacity = "0";
+        });
+      }, 2500);
+    });
+    setTimeout(() => {
+      document.querySelector<HTMLElement>(".toggleButton")!.style.opacity = "0";
+      document.querySelectorAll<HTMLElement>(".color-picker").forEach((element) => {
+        element.style.opacity = "0";
+      });
+    }, 2500);
   });
 
   $: ms = ('0' + Math.floor(date.getMilliseconds() / 10)).slice(-2);
