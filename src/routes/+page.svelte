@@ -187,7 +187,7 @@ time div {
 </svelte:head>
 
 
-<main class="main transition flex min-h-screen flex-col items-center justify-center p-4" class:dark={theme === 1} class:light={theme === 0} style="background: {hex}; color: rgba({rgb.r}, {rgb.b}, {rgb.g}, {rgb.a});">
+<main class="main transition flex min-h-screen flex-col items-center justify-center p-4" class:dark={theme === 1} class:light={theme === 0} style="background: {hex}; color: rgba({rgb.r}, {rgb.g}, {rgb.b}, {rgb.a});">
     <div>
       <h1 class="timeStr">
         <time datetime={dateStr} class="timeEl flex flex-col">
@@ -324,6 +324,10 @@ time div {
       });
     }, 1000);
 
+    var mousedown = false;
+    let timeout: number;
+    var timeout2: number = 2500;
+
     document.addEventListener("mousemove", () => {
       document.querySelector<HTMLElement>(".toggleButton")!.style.opacity = "1";
       document.querySelectorAll<HTMLElement>(".canBeHidden").forEach((element) => {
@@ -332,7 +336,33 @@ time div {
       document.querySelectorAll<HTMLElement>(".color-picker").forEach((element) => {
         element.style.opacity = "1";
       });
-      setTimeout(() => {
+      if (mousedown === false) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+          document.querySelector<HTMLElement>(".toggleButton")!.style.opacity = "0";
+          document.querySelectorAll<HTMLElement>(".canBeHidden").forEach((element) => {
+            element.style.opacity = "0";
+          });
+          document.querySelectorAll<HTMLElement>(".color-picker").forEach((element) => {
+            element.style.opacity = "0";
+          });
+        }, 2500);
+      }
+    });
+    document.addEventListener("mousedown", () => {
+      mousedown = true;
+      document.querySelector<HTMLElement>(".toggleButton")!.style.opacity = "1";
+      document.querySelectorAll<HTMLElement>(".canBeHidden").forEach((element) => {
+        element.style.opacity = "1";
+      });
+      document.querySelectorAll<HTMLElement>(".color-picker").forEach((element) => {
+        element.style.opacity = "1";
+      });
+    });
+    document.addEventListener("mouseup", () => {
+      mousedown = false;
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
         document.querySelector<HTMLElement>(".toggleButton")!.style.opacity = "0";
         document.querySelectorAll<HTMLElement>(".canBeHidden").forEach((element) => {
           element.style.opacity = "0";
@@ -340,14 +370,37 @@ time div {
         document.querySelectorAll<HTMLElement>(".color-picker").forEach((element) => {
           element.style.opacity = "0";
         });
-      }, 2500);
+      }, timeout2);
     });
-    setTimeout(() => {
+    document.addEventListener("keydown", () => {
+      mousedown = true;
+      document.querySelector<HTMLElement>(".toggleButton")!.style.opacity = "1";
+      document.querySelectorAll<HTMLElement>(".canBeHidden").forEach((element) => {
+        element.style.opacity = "1";
+      });
+      document.querySelectorAll<HTMLElement>(".color-picker").forEach((element) => {
+        element.style.opacity = "1";
+      });
+    });
+    document.addEventListener("keyup", () => {
+      mousedown = false;
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        document.querySelector<HTMLElement>(".toggleButton")!.style.opacity = "0";
+        document.querySelectorAll<HTMLElement>(".canBeHidden").forEach((element) => {
+          element.style.opacity = "0";
+        });
+        document.querySelectorAll<HTMLElement>(".color-picker").forEach((element) => {
+          element.style.opacity = "0";
+        });
+      }, timeout2);
+    });
+    timeout = setTimeout(() => {
       document.querySelector<HTMLElement>(".toggleButton")!.style.opacity = "0";
       document.querySelectorAll<HTMLElement>(".color-picker").forEach((element) => {
         element.style.opacity = "0";
       });
-    }, 2500);
+    }, timeout2);
   });
 
   $: ms = ('0' + Math.floor(date.getMilliseconds() / 10)).slice(-2);
