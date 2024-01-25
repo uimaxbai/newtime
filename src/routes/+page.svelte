@@ -185,6 +185,9 @@ time div {
   <meta name="msapplication-TileColor" content="#2d89ef">
   <meta name="msapplication-config" content="/icons/browserconfig.xml">
   <link rel="canonical" href="https://time.okit.works">
+  <meta name="og:image" content="https://time.okit.works/icons/android-chrome-512x512.png">
+  <meta name="og:image:alt" content="The Time">
+  <meta name="twitter:image" content="https://time.okit.works/icons/android-chrome-512x512.png">
 </svelte:head>
 
 
