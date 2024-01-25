@@ -23,8 +23,8 @@ Move your mouse. Menu options time out after 2.5 seconds.
 
 ## To-do
 
-- Add a new widget interface
-- Add more information via the antenna icon (syncing icon, diff etc.)
+- [ ] Add a new widget interface
+- [ ] Add more information via the antenna icon (syncing icon, diff etc.)
 
 ## License
 
