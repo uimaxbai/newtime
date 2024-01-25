@@ -184,6 +184,7 @@ time div {
   <link rel="shortcut icon" href="/icons/favicon.ico">
   <meta name="msapplication-TileColor" content="#2d89ef">
   <meta name="msapplication-config" content="/icons/browserconfig.xml">
+  <link rel="canonical" href="https://time.okit.works">
 </svelte:head>
 
 
