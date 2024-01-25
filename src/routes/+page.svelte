@@ -159,6 +159,15 @@ time div {
 :global(.color) {
   border: 1px solid #999;
 }
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  text-align: center;
+  font-size: 2rem;
+  background: transparent;
+}
 </style>
 
 <svelte:head>
@@ -251,6 +260,9 @@ time div {
         </div>
       {/if}
     </div>
+    <a class="canBeHidden footer" href="https://github.com/uimaxbai/newtime" target="_blank">
+      <Fa icon={faGithub} />
+    </a>
 </main>
 
 
@@ -258,6 +270,7 @@ time div {
   import Fa from '../../node_modules/svelte-fa/dist/fa.svelte';
   import { fade } from 'svelte/transition';
   import { faTowerCell, faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons/index.js';
+  import { faGithub } from '@fortawesome/free-brands-svg-icons/index.js';
   import { page } from '$app/stores';
   import { onMount } from 'svelte';
   import ColorPicker from 'svelte-awesome-color-picker';
