@@ -162,17 +162,19 @@ time div {
 </style>
 
 <svelte:head>
-  <title>The Time</title>
+  <title>The Time - exact time, to the second</title>
   <meta name="description" content="A simple website that shows the time. Night mode included as default.">
   <meta name="keywords" content="time, thetime, current time">
   <link rel="manifest" href="/manifest.webmanifest" />
-  <meta name="og:title" content="The Time" />
+  <meta name="og:title" content="The Time - exact time, to the second" />
+  <meta name="og:type" content="website" />
   <meta name="og:description" content="A simple website that shows the time. Night mode included as default." />
   <meta name="og:url" content="https://time.okit.works" />
-  <meta name="og:site_name" content="The Time" />
+  <meta name="og:site_name" content="The Time - exact time, to the second" />
   <meta name="og:locale" content="en_GB" />
+  <meta name="og:locale:alternate" content="en_US" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="The Time" />
+  <meta name="twitter:title" content="The Time - exact time, to the second" />
   <meta name="twitter:description" content="A simple website that shows the time. Night mode included as default." />
   <meta name="twitter:creator" content="@uimaxbai" />
   <meta name="robots" content="index, follow, max-snippet: -1, max-image-preview:large, max-video-preview: -1">
