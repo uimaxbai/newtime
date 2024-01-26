@@ -172,19 +172,19 @@ time div {
 
 <svelte:head>
   <title>The Time - exact time, to the second</title>
-  <meta name="description" content="A simple website that shows the time. Night mode included as default.">
+  <meta name="description" content="A simple website that shows the time, to a tenth of a second. Night mode included as default. Custom themes. Open source. Clean interface. Timezones. And much more.">
   <meta name="keywords" content="time, thetime, current time">
   <link rel="manifest" href="/manifest.webmanifest" />
   <meta name="og:title" content="The Time - exact time, to the second" />
   <meta name="og:type" content="website" />
-  <meta name="og:description" content="A simple website that shows the time. Night mode included as default." />
+  <meta name="og:description" content="A simple website that shows the time, to a tenth of a second. Night mode included as default. Custom themes. Open source. Clean interface. Timezones. And much more." />
   <meta name="og:url" content="https://time.okit.works" />
   <meta name="og:site_name" content="The Time - exact time, to the second" />
   <meta name="og:locale" content="en_GB" />
   <meta name="og:locale:alternate" content="en_US" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="The Time - exact time, to the second" />
-  <meta name="twitter:description" content="A simple website that shows the time. Night mode included as default." />
+  <meta name="twitter:description" content="A simple website that shows the time, to a tenth of a second. Night mode included as default. Custom themes. Open source. Clean interface. Timezones. And much more." />
   <meta name="twitter:creator" content="@uimaxbai" />
   <meta name="robots" content="index, follow, max-snippet: -1, max-image-preview:large, max-video-preview: -1">
   <meta name="theme-color" content="#111111">
@@ -330,7 +330,12 @@ time div {
 
     setInterval(() => {
       date = new Date((new Date()).getTime() + diff);
-      document.title = `${timeStr} (${$page.data.city}, ${$page.data.country}) | The Time`;
+      var botPattern = "(googlebot\/|bot|Googlebot-Mobile|Googlebot-Image|Google favicon|Mediapartners-Google|bingbot|slurp|java|wget|curl|Commons-HttpClient|Python-urllib|libwww|httpunit|nutch|phpcrawl|msnbot|jyxobot|FAST-WebCrawler|FAST Enterprise Crawler|biglotron|teoma|convera|seekbot|gigablast|exabot|ngbot|ia_archiver|GingerCrawler|webmon |httrack|webcrawler|grub.org|UsineNouvelleCrawler|antibot|netresearchserver|speedy|fluffy|bibnum.bnf|findlink|msrbot|panscient|yacybot|AISearchBot|IOI|ips-agent|tagoobot|MJ12bot|dotbot|woriobot|yanga|buzzbot|mlbot|yandexbot|purebot|Linguee Bot|Voyager|CyberPatrol|voilabot|baiduspider|citeseerxbot|spbot|twengabot|postrank|turnitinbot|scribdbot|page2rss|sitebot|linkdex|Adidxbot|blekkobot|ezooms|dotbot|Mail.RU_Bot|discobot|heritrix|findthatfile|europarchive.org|NerdByNature.Bot|sistrix crawler|ahrefsbot|Aboundex|domaincrawler|wbsearchbot|summify|ccbot|edisterbot|seznambot|ec2linkfinder|gslfbot|aihitbot|intelium_bot|facebookexternalhit|yeti|RetrevoPageAnalyzer|lb-spider|sogou|lssbot|careerbot|wotbox|wocbot|ichiro|DuckDuckBot|lssrocketcrawler|drupact|webcompanycrawler|acoonbot|openindexspider|gnam gnam spider|web-archive-net.com.bot|backlinkcrawler|coccoc|integromedb|content crawler spider|toplistbot|seokicks-robot|it2media-domain-crawler|ip-web-crawler.com|siteexplorer.info|elisabot|proximic|changedetection|blexbot|arabot|WeSEE:Search|niki-bot|CrystalSemanticsBot|rogerbot|360Spider|psbot|InterfaxScanBot|Lipperhey SEO Service|CC Metadata Scaper|g00g1e.net|GrapeshotCrawler|urlappendbot|brainobot|fr-crawler|binlar|SimpleCrawler|Livelapbot|Twitterbot|cXensebot|smtbot|bnf.fr_bot|A6-Indexer|ADmantX|Facebot|Twitterbot|OrangeBot|memorybot|AdvBot|MegaIndex|SemanticScholarBot|ltx71|nerdybot|xovibot|BUbiNG|Qwantify|archive.org_bot|Applebot|TweetmemeBot|crawler4j|findxbot|SemrushBot|yoozBot|lipperhey|y!j-asr|Domain Re-Animator Bot|AddThis)";
+      var re = new RegExp(botPattern, 'i');
+      var userAgent = navigator.userAgent; 
+      if (!(re.test(userAgent))) {
+        document.title = `${timeStr} (${$page.data.city}, ${$page.data.country}) | The Time`;
+      }
       localStorage.setItem("theme", theme.toString());
       if (theme === 2) {
         localStorage.setItem("bg", hex);
