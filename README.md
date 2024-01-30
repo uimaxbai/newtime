@@ -2,6 +2,8 @@
 
 A new time.
 
+EDIT: it's done.
+
 Predecessor to `thetime`.
 
 Visit me [here](https://time.okit.works) or [here](https://thetime.pages.dev) (backup).
